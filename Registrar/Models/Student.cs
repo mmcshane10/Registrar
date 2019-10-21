@@ -11,7 +11,8 @@ namespace Registrar.Models
 
         public int StudentId { get; set; }
         public string Name { get; set; }
+        public virtual ApplicationUser User { get; set; } //new line
 
-        public ICollection<Enrollment> Courses { get;}
+        public ICollection<Enrollment> Courses { get; }
     }
 }

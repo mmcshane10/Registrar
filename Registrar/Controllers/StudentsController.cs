@@ -4,21 +4,31 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Registrar.Controllers
+
 {
+    [Authorize]
     public class StudentsController : Controller
     {
         private readonly RegistrarContext _db;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public StudentsController(RegistrarContext db)
+        public StudentsController(UserManager<ApplicationUser> userManager, RegistrarContext db)
         {
+            _userManager = userManager;
             _db = db;
         }
-
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(_db.Students.ToList());
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            var userStudents = _db.Students.Where(entry => entry.User.Id == currentUser.Id);
+            return View(userStudents);
         }
 
         public ActionResult Create()
@@ -28,8 +38,11 @@ namespace Registrar.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Student student, int CourseId)
+        public async Task<ActionResult> Create(Student student, int CourseId)
         {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            student.User = currentUser;
             _db.Students.Add(student);
             if (CourseId != 0)
             {

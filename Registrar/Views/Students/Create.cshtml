@@ -4,16 +4,17 @@
 
 @model Registrar.Models.Student
 
-<h4>Add a new student</h4>
+<h4>Add a new Student</h4>
 
 @using (Html.BeginForm())
 {
     @Html.LabelFor(model => model.Name)
     @Html.TextBoxFor(model => model.Name)
 
-    @Html.Label("Select course")
+    @Html.Label("Select Course")
     @Html.DropDownList("CourseId")
 
-    <input type="submit" value="Add new student" class="btn btn-default" />
+    <input type="submit" value="Add new course" class="btn btn-default" />
 }
-<p>@Html.ActionLink("Show all students", "Index")</p>
+<p>@Html.ActionLink("Show all items", "Index")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
