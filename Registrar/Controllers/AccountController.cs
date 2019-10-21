@@ -29,18 +29,11 @@ namespace Registrar.Controllers
             return View();
         }
         
-        [HttpPost]
-        public async Task<ActionResult> LogOff()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index");
-        }
-
         public ActionResult Login()
         {
             return View();
         }
-
+        
         [HttpPost]
         public async Task<ActionResult> Login(LoginViewModel model)
         {
@@ -54,7 +47,7 @@ namespace Registrar.Controllers
                 return View();
             }
         }
-       
+
         [HttpPost]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
